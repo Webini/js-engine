@@ -39,8 +39,8 @@ module.exports = class GameObjectContainer {
     }
     this.go.push(go);
 
-    if (this.onGameObjectAdded) {
-      this.onGameObjectAdded(go);
+    if (this.onGameObjectAttached) {
+      this.onGameObjectAttached(go);
     }
 
     return this;
@@ -54,8 +54,8 @@ module.exports = class GameObjectContainer {
   detachGameObject(go) {
     for (let i = 0, sz = this.go.length; i < sz; i++) {
       if (this.go[i] === go || this.go[i].name === go) {
-        if (this.onGameObjectRemoved) {
-          this.onGameObjectRemoved(this.go[i]);
+        if (this.onGameObjectDetached) {
+          this.onGameObjectDetached(this.go[i]);
         }
         this.go.splice(i, 1);
         return true;

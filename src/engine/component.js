@@ -1,6 +1,10 @@
 module.exports = class Component {
-  constructor(name, parent) {
-    this.parent = parent;
+  /**
+   * @param {String} name 
+   * @param {GameObject} go 
+   */
+  constructor(name, object) {
+    this.object = object;
     this.name = name;
   }
 

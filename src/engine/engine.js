@@ -4,11 +4,16 @@ const GameObject      = require('./game-object.js');
 const Scene           = require('./scene.js');
 
 module.exports = class Engine {
-  constructor({ fps } = { fps: 30 }) {
+  constructor({ renderer, rendererOptions } = { rendererOptions: {} }) {
+    if (!renderer) {
+      throw new Error('You must specify a renderer to initialize this engine');
+    }
+
     this.services = new ObjectContainer();
     this.services.registerInstance('engine', this);
+    this.renderer = new renderer(rendererOptions);
 
-    this.timer = new Timer(fps, () => this._update());
+    this.timer = new Timer(() => this._update());
     this.scenes = [];
   }
 
@@ -44,12 +49,12 @@ module.exports = class Engine {
       throw new Error('You must boostrap engine before using create');
     }
 
-    const go = new type(name, this.engine);
+    const go = new type(name, this);
     if (!(go instanceof GameObject)) {
       throw new Error('You must inherit your object from GameObject');
     }
 
-    this.engine.services.injectTo(go);
+    this.services.injectTo(go);
     return go;
   }
 
@@ -91,8 +96,7 @@ module.exports = class Engine {
     this.scenes.forEach((scene) => {
       scene.update(delta);
     });
-    this.scenes.forEach((scene) => {
-      scene.render(this.renderer);
-    });
+    
+    this.renderer.render();
   }
 };

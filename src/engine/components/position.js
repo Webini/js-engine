@@ -1,8 +1,8 @@
 const Component = require('../component.js');
 
-module.exports = class Position extends Component {
-  constructor(parent) {
-    super('position', parent);
+module.exports = class PositionComponent extends Component {
+  constructor(object) {
+    super('position', object);
     
     this.x = 0;
     this.y = 0;

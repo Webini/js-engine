@@ -1,18 +1,30 @@
 const GameObject = require('./game-object.js');
+const EVENTS     = require('./game-object-events.js');
 
 class Scene extends GameObject {
   constructor(name, engine) {
-    super();
-    this.engine = engine;
-    this.name = name;
+    super(name, engine);
+    this.emitter.on(EVENTS.GAME_OBJECT_REGISTERED, (go) => {
+      engine.renderer.addGameObject(go);
+    });
+
+    this.emitter.on(EVENTS.GAME_OBJECT_UNREGISTERED, (go) => {
+      engine.renderer.removeGameObject(go);
+    });
   }
 
-  onGameObjectAdded(go) {
-    go.setScene(go);
+  onGameObjectAttached(go) {
+    go.setScene(this);
   }
 
-  onGameObjectRemoved(go) {
+  onGameObjectDetached(go) {
     go.setScene(null);
+  }
+
+  static $getDependencies() {
+    return {
+      renderer: 'renderer'
+    };
   }
 }
 
